@@ -82,7 +82,6 @@
       transition: all 0.2s;
     }
     .btn-secondary:hover { background: rgba(255,255,255,0.15); }
-    .btn-install-hidden { display: none; }
 
     /* Features */
     .features { padding: 64px 0; background: white; }
@@ -176,7 +175,7 @@
       <h1>Sierra Leone <span>Community News</span></h1>
       <p>Local news, market prices, and community notices. Built for Sierra Leone, by Sierra Leoneans. No app store needed.</p>
       <div class="hero-buttons">
-        <button id="installBtn" class="btn-primary btn-install-hidden">
+        <button id="installBtn" class="btn-primary">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           Install Free App
         </button>
@@ -184,7 +183,7 @@
           Start Reading →
         </a>
       </div>
-      <p id="fallbackText" style="margin-top:12px;font-size:0.8rem;color:#a7f3d0;"></p>
+      <p style="margin-top:12px;font-size:0.8rem;color:#a7f3d0;"></p>
     </div>
   </section>
 
@@ -310,39 +309,24 @@
   <script>
     let deferredPrompt = null;
 
-    // Listen for the PWA install prompt
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       deferredPrompt = e;
-      const btn = document.getElementById('installBtn');
-      btn.classList.remove('btn-install-hidden');
     });
 
     document.getElementById('installBtn').addEventListener('click', async () => {
-      if (!deferredPrompt) {
-        // Fallback: navigate to the app where PWA install works
-        window.location.href = 'https://sl-news.vercel.app';
-        return;
-      }
-      deferredPrompt.prompt();
-      const result = await deferredPrompt.userChoice;
-      if (result.outcome === 'accepted') {
-        document.getElementById('installBtn').textContent = '✅ Installed!';
-        document.getElementById('installBtn').disabled = true;
-      }
-      deferredPrompt = null;
-    });
-
-    // If on mobile and no install prompt after 5s, show fallback
-    setTimeout(() => {
-      if (deferredPrompt === null) {
-        const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-        if (isMobile) {
-          document.getElementById('fallbackText').textContent =
-            'Tap Share → "Add to Home Screen" in your browser.';
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const result = await deferredPrompt.userChoice;
+        if (result.outcome === 'accepted') {
+          document.getElementById('installBtn').innerHTML = '✅ Installed!';
+          document.getElementById('installBtn').disabled = true;
         }
+        deferredPrompt = null;
+      } else {
+        window.location.href = 'https://sl-news.vercel.app';
       }
-    }, 5000);
+    });
   </script>
 </body>
 </html>
