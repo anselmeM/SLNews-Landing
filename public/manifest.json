@@ -1,0 +1,26 @@
+{
+  "name": "SL News - Sierra Leone Community News",
+  "short_name": "SL News",
+  "description": "Local news, market prices, and community notices for Sierra Leone.",
+  "start_url": "https://sl-news.vercel.app",
+  "scope": "https://sl-news.vercel.app",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone"],
+  "background_color": "#ffffff",
+  "theme_color": "#166534",
+  "categories": ["news"],
+  "icons": [
+    {
+      "src": "https://sl-news.vercel.app/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://sl-news.vercel.app/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

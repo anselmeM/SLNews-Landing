@@ -6,6 +6,11 @@
   <title>SL News — Sierra Leone Community News</title>
   <meta name="description" content="Local news, market prices, and community notices for Sierra Leone. Install the app on any phone. Uses minimal data.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📰</text></svg>">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="SL News">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#166534">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -23,6 +28,7 @@
       padding: 16px 20px; max-width: 1000px; margin: 0 auto;
     }
     .topbar h2 { font-size: 1.3rem; font-weight: 800; color: #166534; }
+    .topbar a { font-size:0.85rem; font-weight:600; color:#166534; text-decoration:none; }
 
     /* Hero */
     .hero {
@@ -57,11 +63,13 @@
       margin-bottom: 24px;
     }
     .hero-buttons { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+
     .btn-primary {
       background: white; color: #166534;
       font-weight: 700; font-size: 1rem;
       padding: 14px 32px; border-radius: 999px;
-      text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+      border: none; cursor: pointer;
+      display: inline-flex; align-items: center; gap: 8px;
       transition: all 0.2s;
     }
     .btn-primary:hover { background: #dcfce7; }
@@ -74,6 +82,7 @@
       transition: all 0.2s;
     }
     .btn-secondary:hover { background: rgba(255,255,255,0.15); }
+    .btn-install-hidden { display: none; }
 
     /* Features */
     .features { padding: 64px 0; background: white; }
@@ -94,7 +103,7 @@
     .card h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 4px; }
     .card p { font-size: 0.85rem; color: #78716c; line-height: 1.5; }
 
-    /* How to install */
+    /* Install section */
     .install { padding: 64px 0; }
     .install h2 { text-align: center; font-size: 1.6rem; font-weight: 800; margin-bottom: 8px; }
     .install > .container > p { text-align: center; color: #78716c; margin-bottom: 36px; }
@@ -115,7 +124,7 @@
     .step h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 6px; }
     .step p { font-size: 0.85rem; color: #78716c; line-height: 1.5; }
 
-    /* Market prices sample */
+    /* Prices */
     .prices { padding: 64px 0; background: white; }
     .prices h2 { text-align: center; font-size: 1.6rem; font-weight: 800; margin-bottom: 8px; }
     .prices > .container > p { text-align: center; color: #78716c; margin-bottom: 36px; }
@@ -132,7 +141,6 @@
     }
     .price-row:last-child { border-bottom: none; }
     .price-row .name { font-weight: 600; }
-    .price-row .value { color: #78716c; }
     .price-row .trend { font-weight: 600; }
     .trend-up { color: #dc2626; }
     .trend-down { color: #16a34a; }
@@ -142,39 +150,24 @@
     .cta { padding: 64px 0; text-align: center; }
     .cta h2 { font-size: 1.6rem; font-weight: 800; margin-bottom: 8px; }
     .cta p { color: #78716c; margin-bottom: 24px; }
-    .cta a { display: inline-flex; }
+    .cta .btn-primary { display: inline-flex; }
 
-    /* Footer */
     footer { padding: 32px 0; text-align: center; font-size: 0.85rem; color: #a8a29e; border-top: 1px solid #e7e5e4; }
-
-    /* App Store button embed */
-    .store-buttons { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 12px; }
-    .store-buttons a {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: #1c1917; color: white;
-      padding: 10px 24px; border-radius: 12px;
-      text-decoration: none; font-size: 0.85rem;
-      font-weight: 600; transition: opacity 0.2s;
-    }
-    .store-buttons a:hover { opacity: 0.85; }
 
     @media (max-width: 640px) {
       .hero h1 { font-size: 2rem; }
       .grid { grid-template-columns: 1fr; }
       .steps { grid-template-columns: 1fr; }
-      .store-buttons { flex-direction: column; align-items: center; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Top bar -->
   <div class="topbar">
     <h2>SL News</h2>
-    <a href="https://sl-news.vercel.app/home" style="font-size:0.85rem;font-weight:600;color:#166534;text-decoration:none;">Open App →</a>
+    <a href="https://sl-news.vercel.app/home">Open App →</a>
   </div>
 
-  <!-- Hero -->
   <section class="hero">
     <div class="container">
       <div class="badge">
@@ -183,18 +176,18 @@
       <h1>Sierra Leone <span>Community News</span></h1>
       <p>Local news, market prices, and community notices. Built for Sierra Leone, by Sierra Leoneans. No app store needed.</p>
       <div class="hero-buttons">
-        <a href="https://sl-news.vercel.app" class="btn-primary">
+        <button id="installBtn" class="btn-primary btn-install-hidden">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           Install Free App
-        </a>
+        </button>
         <a href="https://sl-news.vercel.app/home" class="btn-secondary">
           Start Reading →
         </a>
       </div>
+      <p id="fallbackText" style="margin-top:12px;font-size:0.8rem;color:#a7f3d0;"></p>
     </div>
   </section>
 
-  <!-- Features -->
   <section class="features">
     <div class="container">
       <h2>What you get</h2>
@@ -245,7 +238,6 @@
     </div>
   </section>
 
-  <!-- Market prices sample -->
   <section class="prices">
     <div class="container">
       <h2>Current Market Prices</h2>
@@ -253,29 +245,28 @@
       <div class="price-table">
         <div class="price-row">
           <span class="name">Rice (50kg bag)</span>
-          <span><span class="value">NLe 180,000</span> <span class="trend trend-up">↑ 2.5%</span></span>
+          <span><span class="trend trend-up">↑ 2.5%</span> NLe 180,000</span>
         </div>
         <div class="price-row">
           <span class="name">Petrol (per litre)</span>
-          <span><span class="value">NLe 30</span> <span class="trend trend-down">↓ 8%</span></span>
+          <span><span class="trend trend-down">↓ 8%</span> NLe 30</span>
         </div>
         <div class="price-row">
           <span class="name">Diesel (per litre)</span>
-          <span><span class="value">NLe 32</span> <span class="trend trend-down">↓ 5%</span></span>
+          <span><span class="trend trend-down">↓ 5%</span> NLe 32</span>
         </div>
         <div class="price-row">
           <span class="name">Cement (imported bag)</span>
-          <span><span class="value">NLe 180,000</span> <span class="trend trend-up">↑ 3%</span></span>
+          <span><span class="trend trend-up">↑ 3%</span> NLe 180,000</span>
         </div>
         <div class="price-row">
           <span class="name">Palm Oil (per litre)</span>
-          <span><span class="value">NLe 19,000</span> <span class="trend trend-down">↓ 10.6%</span></span>
+          <span><span class="trend trend-down">↓ 10.6%</span> NLe 19,000</span>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Install steps -->
   <section class="install">
     <div class="container">
       <h2>Install in 3 steps</h2>
@@ -283,13 +274,13 @@
       <div class="steps">
         <div class="step">
           <div class="num">1</div>
-          <h3>Open in Chrome or Safari</h3>
-          <p>Visit sl-news.vercel.app on your phone.</p>
+          <h3>Tap "Install Free App"</h3>
+          <p>Click the green button above on your phone's browser.</p>
         </div>
         <div class="step">
           <div class="num">2</div>
-          <h3>Tap Share</h3>
-          <p>Tap the share icon, then select "Add to Home Screen".</p>
+          <h3>Confirm Install</h3>
+          <p>Your browser will ask if you want to add SL News to your home screen.</p>
         </div>
         <div class="step">
           <div class="num">3</div>
@@ -300,23 +291,58 @@
     </div>
   </section>
 
-  <!-- CTA -->
   <section class="cta">
     <div class="container">
       <h2>Start reading now</h2>
       <p>No sign up required. No data wasted.</p>
-      <a href="https://sl-news.vercel.app/home" class="btn-primary" style="display:inline-flex;">
+      <a href="https://sl-news.vercel.app/home" class="btn-primary" style="display:inline-flex;text-decoration:none;">
         Open SL News →
       </a>
     </div>
   </section>
 
-  <!-- Footer -->
   <footer>
     <div class="container">
       <p>SL News — Community journalism for Sierra Leone.</p>
     </div>
   </footer>
 
+  <script>
+    let deferredPrompt = null;
+
+    // Listen for the PWA install prompt
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      const btn = document.getElementById('installBtn');
+      btn.classList.remove('btn-install-hidden');
+    });
+
+    document.getElementById('installBtn').addEventListener('click', async () => {
+      if (!deferredPrompt) {
+        // Fallback: navigate to the app where PWA install works
+        window.location.href = 'https://sl-news.vercel.app';
+        return;
+      }
+      deferredPrompt.prompt();
+      const result = await deferredPrompt.userChoice;
+      if (result.outcome === 'accepted') {
+        document.getElementById('installBtn').textContent = '✅ Installed!';
+        document.getElementById('installBtn').disabled = true;
+      }
+      deferredPrompt = null;
+    });
+
+    // If on mobile and no install prompt after 5s, show fallback
+    setTimeout(() => {
+      if (deferredPrompt === null) {
+        const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+        if (isMobile) {
+          document.getElementById('fallbackText').textContent =
+            'Tap Share → "Add to Home Screen" in your browser.';
+        }
+      }
+    }, 5000);
+  </script>
 </body>
 </html>
