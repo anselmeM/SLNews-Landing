@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SL News — Sierra Leone Community News</title>
+  <meta name="description" content="Local news, market prices, and community notices for Sierra Leone. Install the app on any phone. Uses minimal data.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📰</text></svg>">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: #fafaf9;
+      color: #1c1917;
+      -webkit-font-smoothing: antialiased;
+    }
+    .container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
+
+    /* Top bar */
+    .topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 20px; max-width: 1000px; margin: 0 auto;
+    }
+    .topbar h2 { font-size: 1.3rem; font-weight: 800; color: #166534; }
+
+    /* Hero */
+    .hero {
+      padding: 60px 0 40px;
+      text-align: center;
+      background: linear-gradient(180deg, #052e16 0%, #166534 50%, #15803d 100%);
+      color: white;
+    }
+    .hero h1 {
+      font-size: 2.8rem;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 12px;
+    }
+    .hero h1 span { color: #86efac; }
+    .hero p {
+      font-size: 1.1rem;
+      color: #a7f3d0;
+      max-width: 520px;
+      margin: 0 auto 28px;
+      line-height: 1.6;
+    }
+    .hero .badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 999px;
+      padding: 8px 16px;
+      font-size: 0.8rem;
+      color: #bbf7d0;
+      margin-bottom: 24px;
+    }
+    .hero-buttons { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+    .btn-primary {
+      background: white; color: #166534;
+      font-weight: 700; font-size: 1rem;
+      padding: 14px 32px; border-radius: 999px;
+      text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+      transition: all 0.2s;
+    }
+    .btn-primary:hover { background: #dcfce7; }
+    .btn-secondary {
+      background: rgba(255,255,255,0.1); color: white;
+      font-weight: 600; font-size: 1rem;
+      padding: 14px 28px; border-radius: 999px;
+      text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+      border: 1px solid rgba(255,255,255,0.2);
+      transition: all 0.2s;
+    }
+    .btn-secondary:hover { background: rgba(255,255,255,0.15); }
+
+    /* Features */
+    .features { padding: 64px 0; background: white; }
+    .features h2 { text-align: center; font-size: 1.6rem; font-weight: 800; margin-bottom: 36px; }
+    .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .card {
+      padding: 24px; border-radius: 16px;
+      border: 1px solid #e7e5e4;
+      display: flex; gap: 16px; align-items: flex-start;
+    }
+    .card .icon {
+      width: 44px; height: 44px;
+      background: #dcfce7;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; flex-shrink: 0;
+    }
+    .card h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 4px; }
+    .card p { font-size: 0.85rem; color: #78716c; line-height: 1.5; }
+
+    /* How to install */
+    .install { padding: 64px 0; }
+    .install h2 { text-align: center; font-size: 1.6rem; font-weight: 800; margin-bottom: 8px; }
+    .install > .container > p { text-align: center; color: #78716c; margin-bottom: 36px; }
+    .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .step {
+      text-align: center; padding: 24px;
+      background: white; border-radius: 16px;
+      border: 1px solid #e7e5e4;
+    }
+    .step .num {
+      width: 36px; height: 36px;
+      background: #166534; color: white;
+      border-radius: 999px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 0.9rem;
+      margin: 0 auto 12px;
+    }
+    .step h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 6px; }
+    .step p { font-size: 0.85rem; color: #78716c; line-height: 1.5; }
+
+    /* Market prices sample */
+    .prices { padding: 64px 0; background: white; }
+    .prices h2 { text-align: center; font-size: 1.6rem; font-weight: 800; margin-bottom: 8px; }
+    .prices > .container > p { text-align: center; color: #78716c; margin-bottom: 36px; }
+    .price-table {
+      max-width: 600px; margin: 0 auto;
+      border-radius: 16px; overflow: hidden;
+      border: 1px solid #e7e5e4;
+    }
+    .price-row {
+      display: flex; justify-content: space-between;
+      padding: 14px 20px;
+      border-bottom: 1px solid #e7e5e4;
+      font-size: 0.9rem;
+    }
+    .price-row:last-child { border-bottom: none; }
+    .price-row .name { font-weight: 600; }
+    .price-row .value { color: #78716c; }
+    .price-row .trend { font-weight: 600; }
+    .trend-up { color: #dc2626; }
+    .trend-down { color: #16a34a; }
+    .price-row:nth-child(even) { background: #f5f5f4; }
+
+    /* CTA */
+    .cta { padding: 64px 0; text-align: center; }
+    .cta h2 { font-size: 1.6rem; font-weight: 800; margin-bottom: 8px; }
+    .cta p { color: #78716c; margin-bottom: 24px; }
+    .cta a { display: inline-flex; }
+
+    /* Footer */
+    footer { padding: 32px 0; text-align: center; font-size: 0.85rem; color: #a8a29e; border-top: 1px solid #e7e5e4; }
+
+    /* App Store button embed */
+    .store-buttons { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 12px; }
+    .store-buttons a {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: #1c1917; color: white;
+      padding: 10px 24px; border-radius: 12px;
+      text-decoration: none; font-size: 0.85rem;
+      font-weight: 600; transition: opacity 0.2s;
+    }
+    .store-buttons a:hover { opacity: 0.85; }
+
+    @media (max-width: 640px) {
+      .hero h1 { font-size: 2rem; }
+      .grid { grid-template-columns: 1fr; }
+      .steps { grid-template-columns: 1fr; }
+      .store-buttons { flex-direction: column; align-items: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top bar -->
+  <div class="topbar">
+    <h2>SL News</h2>
+    <a href="https://slnews.vercel.app/home" style="font-size:0.85rem;font-weight:600;color:#166534;text-decoration:none;">Open App →</a>
+  </div>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <div class="badge">
+        <span>📱</span> Works on any phone. Low data mode.
+      </div>
+      <h1>Sierra Leone <span>Community News</span></h1>
+      <p>Local news, market prices, and community notices. Built for Sierra Leone, by Sierra Leoneans. No app store needed.</p>
+      <div class="hero-buttons">
+        <a href="https://slnews.vercel.app" class="btn-primary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Install Free App
+        </a>
+        <a href="https://slnews.vercel.app/home" class="btn-secondary">
+          Start Reading →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="features">
+    <div class="container">
+      <h2>What you get</h2>
+      <div class="grid">
+        <div class="card">
+          <div class="icon">📰</div>
+          <div>
+            <h3>Local News</h3>
+            <p>Stories from Sierra Leone Telegraph, Politico SL, and Concord Times — all in one feed.</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="icon">📊</div>
+          <div>
+            <h3>Market Prices</h3>
+            <p>Rice, petrol, cement, palm oil prices across Freetown, Bo, Makeni, and Kenema.</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="icon">📢</div>
+          <div>
+            <h3>Community Notices</h3>
+            <p>Government announcements, local events, and public notices. Anyone can post.</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="icon">🔍</div>
+          <div>
+            <h3>Instant Search</h3>
+            <p>Find any article or notice instantly. Filter by category or region.</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="icon">📱</div>
+          <div>
+            <h3>No App Store Needed</h3>
+            <p>Install directly from your browser. Works on any smartphone. Uses minimal data.</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="icon">📴</div>
+          <div>
+            <h3>Works Offline</h3>
+            <p>Saved articles and prices are available even without internet connection.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Market prices sample -->
+  <section class="prices">
+    <div class="container">
+      <h2>Current Market Prices</h2>
+      <p>Updated weekly. Prices in New Leone (NLe).</p>
+      <div class="price-table">
+        <div class="price-row">
+          <span class="name">Rice (50kg bag)</span>
+          <span><span class="value">NLe 180,000</span> <span class="trend trend-up">↑ 2.5%</span></span>
+        </div>
+        <div class="price-row">
+          <span class="name">Petrol (per litre)</span>
+          <span><span class="value">NLe 30</span> <span class="trend trend-down">↓ 8%</span></span>
+        </div>
+        <div class="price-row">
+          <span class="name">Diesel (per litre)</span>
+          <span><span class="value">NLe 32</span> <span class="trend trend-down">↓ 5%</span></span>
+        </div>
+        <div class="price-row">
+          <span class="name">Cement (imported bag)</span>
+          <span><span class="value">NLe 180,000</span> <span class="trend trend-up">↑ 3%</span></span>
+        </div>
+        <div class="price-row">
+          <span class="name">Palm Oil (per litre)</span>
+          <span><span class="value">NLe 19,000</span> <span class="trend trend-down">↓ 10.6%</span></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Install steps -->
+  <section class="install">
+    <div class="container">
+      <h2>Install in 3 steps</h2>
+      <p>Free. No app store. Works on any phone.</p>
+      <div class="steps">
+        <div class="step">
+          <div class="num">1</div>
+          <h3>Open in Chrome or Safari</h3>
+          <p>Visit slnews.vercel.app on your phone.</p>
+        </div>
+        <div class="step">
+          <div class="num">2</div>
+          <h3>Tap Share</h3>
+          <p>Tap the share icon, then select "Add to Home Screen".</p>
+        </div>
+        <div class="step">
+          <div class="num">3</div>
+          <h3>Open Like Any App</h3>
+          <p>SL News appears on your home screen. Open it anytime, even offline.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <div class="container">
+      <h2>Start reading now</h2>
+      <p>No sign up required. No data wasted.</p>
+      <a href="https://slnews.vercel.app/home" class="btn-primary" style="display:inline-flex;">
+        Open SL News →
+      </a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>SL News — Community journalism for Sierra Leone.</p>
+    </div>
+  </footer>
+
+</body>
+</html>
